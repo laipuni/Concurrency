@@ -1,6 +1,7 @@
-package com.example.shopproject.domain.item;
+package com.example.shopproject.domain.item.ItemRepository;
 
 
+import com.example.shopproject.domain.item.Item;
 import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
@@ -23,4 +24,6 @@ public interface ItemRepository extends JpaRepository<Item,Long> {
     @Lock(LockModeType.PESSIMISTIC_WRITE)//Pessimistic Lock Exclusive Lock 설정
     @Query("select i from Item i where i.itemCode = :itemCode")
     Optional<Item> findByItemCodeForUpdate(@Param("itemCode") String itemCode);
+
+
 }

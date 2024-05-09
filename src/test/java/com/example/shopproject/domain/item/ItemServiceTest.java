@@ -1,6 +1,7 @@
 package com.example.shopproject.domain.item;
 
 import com.example.shopproject.domain.IntegrationTestSupport;
+import com.example.shopproject.domain.item.ItemRepository.ItemRepository;
 import com.example.shopproject.domain.item.request.ItemCreateRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
@@ -57,22 +58,24 @@ class ItemServiceTest extends IntegrationTestSupport {
 
     @DisplayName("주문 받은 수량만큼 현재 수량을 차감한다.")
     @Test
-    void removeStock(){
+    void reductStock(){
         //given
-        int quantity = 10;
-        ItemCreateRequest request = ItemCreateRequest.builder()
-                .itemName("삼각김밥")
-                .price(1700)
-                .quantity(30)
-                .build();
+        int itemQuantity = 30;
+        int reductQuantity = 10;
+        String itemCode = String.valueOf(UUID.randomUUID());
 
-        itemService.save(request);
-        Item item = itemRepository.findAll().get(0);
+        Item item = Item.builder()
+                .itemCode(itemCode)
+                .price(1700)
+                .itemName("삼각김밥")
+                .quantity(itemQuantity)
+                .build();
+        itemRepository.save(item);
         //when
-        item.reductQuantity(quantity);
+        itemService.reductQuantity(itemCode, reductQuantity);
 
         //then
-        assertThat(itemRepository.findAll().get(0).getQuantity()).isEqualTo(20);
+        assertThat(itemRepository.findAll().get(0).getQuantity()).isEqualTo(itemQuantity - reductQuantity);
     }
 
     @DisplayName("주문 받은 수량이 현재 수량보다 클 경우 에러가 발생한다.")
@@ -94,11 +97,11 @@ class ItemServiceTest extends IntegrationTestSupport {
                 .hasMessageMatching("재고의 수량이 부족합니다.");
     }
 
-    @DisplayName("동시성문제를 해결하기 위해 Mysql pessimistic Lock을 이용하면 적절하게 상품의 수량이 감소한다.")
+    @DisplayName("Mysql pessimistic Lock을 이용하면 적절하게 상품의 수량이 감소한다.")
     @Test
     void createOrderWithPessimisticLock() throws InterruptedException {
         //given
-        int threadNum = 30;
+        int threadNum = 80;
         String itemCode = String.valueOf(UUID.randomUUID());
 
         Item item = Item.builder()
@@ -152,7 +155,7 @@ class ItemServiceTest extends IntegrationTestSupport {
         for (int i = 0; i < threadNum; i++) {
             executorService.execute(() -> {
                 try {
-                    itemService.reductQuantitBySyncronized(itemCode,1);
+                    itemService.reductQuantityBySyncronized(itemCode,1);
                 } finally {
                     latch.countDown();
                 }

@@ -1,5 +1,6 @@
 package com.example.shopproject.domain.item;
 
+import com.example.shopproject.domain.item.ItemRepository.ItemRepository;
 import com.example.shopproject.domain.item.request.ItemCreateRequest;
 import com.example.shopproject.domain.item.response.ItemCreateResponse;
 import lombok.RequiredArgsConstructor;
@@ -23,9 +24,9 @@ public class ItemService {
     }
 
     @Transactional
-    public void reductQuantityByPessimisticLock(String ItemCode,int quantity){
+    public void reductQuantityByPessimisticLock(String itemCode,int quantity){
         //구매할 물품을 조회 by Mysql pessimistic Lock
-        Item item = itemRepository.findByItemCodeForUpdate(ItemCode)
+        Item item = itemRepository.findByItemCodeForUpdate(itemCode)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 물품입니다."));
         //상품의 주문 수만큼 제품의 수량 차감
         item.reductQuantity(quantity);
@@ -40,14 +41,20 @@ public class ItemService {
      * 하지만 로직이 끝나고 누군가 메소드에 접근 할 경우 막지 못한다.
      */
     @Transactional
-    public synchronized void reductQuantitBySyncronized(String ItemCode,int quantity){
+    public synchronized void reductQuantityBySyncronized(String itemCode, int quantity){
         //구매할 물품을 조회 by Mysql pessimistic Lock
-        Item item = itemRepository.findByItemCode(ItemCode)
+        Item item = itemRepository.findByItemCode(itemCode)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 물품입니다."));
         //상품의 주문 수만큼 제품의 수량 차감
         item.reductQuantity(quantity);
     }
 
-
-
+    @Transactional
+    public void reductQuantity(final String itemCode, final int quantity) {
+        //구매할 물품을 조회 by Mysql pessimistic Lock
+        Item item = itemRepository.findByItemCode(itemCode)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 물품입니다."));
+        //상품의 주문 수만큼 제품의 수량 차감
+        item.reductQuantity(quantity);
+    }
 }

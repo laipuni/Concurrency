@@ -1,10 +1,7 @@
 package com.example.shopproject.domain.item;
 
 import com.example.shopproject.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,6 +26,9 @@ public class Item extends BaseEntity {
 
     @Column(nullable = false)
     private String itemCode;
+
+    @Version
+    private int version;
 
     @Builder
     private Item(final int quantity, final int price, String itemName,final String itemCode) {

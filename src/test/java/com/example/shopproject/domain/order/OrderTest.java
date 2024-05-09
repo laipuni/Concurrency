@@ -2,22 +2,14 @@ package com.example.shopproject.domain.order;
 
 import com.example.shopproject.domain.IntegrationTestSupport;
 import com.example.shopproject.domain.item.Item;
-import com.example.shopproject.domain.item.ItemRepository;
-import com.example.shopproject.domain.member.Member;
-import com.example.shopproject.domain.member.MemberRepository;
-import com.example.shopproject.domain.member.MemberService;
 import com.example.shopproject.domain.orderitem.OrderItem;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.tuple;
-import static org.junit.jupiter.api.Assertions.*;
 
 class OrderTest extends IntegrationTestSupport{
 
@@ -25,11 +17,6 @@ class OrderTest extends IntegrationTestSupport{
     @Test
     void createOrder(){
         //given
-        Member member = Member.builder()
-                .age(25)
-                .nickname("이진호")
-                .build();
-
         Item item = Item.builder()
                 .quantity(20)
                 .itemName("삼각김밥")
@@ -45,7 +32,7 @@ class OrderTest extends IntegrationTestSupport{
         );
 
         //when
-        Order order = Order.createBy(member, LocalDate.of(2024, 4, 9), orderItems);
+        Order order = Order.createBy(orderItems);
 
         //then
         assertThat(order)

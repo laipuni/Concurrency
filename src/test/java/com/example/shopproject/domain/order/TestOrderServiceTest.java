@@ -2,9 +2,7 @@ package com.example.shopproject.domain.order;
 
 import com.example.shopproject.domain.IntegrationTestSupport;
 import com.example.shopproject.domain.item.Item;
-import com.example.shopproject.domain.item.ItemRepository;
-import com.example.shopproject.domain.member.Member;
-import com.example.shopproject.domain.member.MemberRepository;
+import com.example.shopproject.domain.item.ItemRepository.ItemRepository;
 import com.example.shopproject.domain.order.request.OrderCreateRequest;
 import com.example.shopproject.domain.orderitem.OrderItem;
 import org.junit.jupiter.api.DisplayName;
@@ -17,19 +15,15 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
-import static org.junit.jupiter.api.Assertions.*;
 
 
-class OrderServiceTest extends IntegrationTestSupport {
+class TestOrderServiceTest extends IntegrationTestSupport {
 
     @Autowired
-    private OrderService orderService;
+    private TestOrderService orderService;
 
     @Autowired
     private ItemRepository itemRepository;
-
-    @Autowired
-    private MemberRepository memberRepository;
 
     @Autowired
     private OrderRepository orderRepository;
@@ -46,10 +40,6 @@ class OrderServiceTest extends IntegrationTestSupport {
                 .itemCode(itemCode)
                 .itemCount(5)
                 .build();
-        Member member =Member.builder()
-                .nickname("라이푸니")
-                .age(15)
-                .build();
 
         Item item = Item.builder()
                 .itemCode(itemCode)
@@ -60,11 +50,10 @@ class OrderServiceTest extends IntegrationTestSupport {
 
         List<OrderItem> orderItems = List.of(OrderItem.create(item, count));
 
-        Order order = Order.createBy(member, date, orderItems);
+        Order order = Order.createBy(orderItems);
 
-        memberRepository.save(member);
         itemRepository.save(item);
-        orderService.createOrders(request,member.getId(),LocalDate.of(2024,4,10));
+        orderService.createOrders(request);
 
         //when
         List<Order> orders = orderRepository.findAll();
@@ -72,7 +61,7 @@ class OrderServiceTest extends IntegrationTestSupport {
         //then
         assertThat(orders).hasSize(1)
                 .extracting("totalPrice","totalCount","orderStatus","orderDate")
-                .containsExactly(tuple(8500,5,OrderStatus.INIT,date));
+                .containsExactly(tuple(8500,5,date));
         assertThat(item.getQuantity()).isEqualTo(25);
     }
 
