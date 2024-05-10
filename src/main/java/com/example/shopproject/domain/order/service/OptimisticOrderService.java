@@ -22,11 +22,11 @@ public class OptimisticOrderService implements OrderService{
     @Transactional
     @Override
     public OrderCreateResponse orderBy(final String itemCode, final int Quantity) {
-        //todo implement findByItemCode Optimistic version in ItemRepository
-
-        //OrderItem orderItem = OrderItem.create(item,Quantity);
-
-        //Order order = Order.createBy(List.of(orderItem));
-        return null;
+        //충돌 발생시 ObjectOptimisticLockingFailureException 발생
+        Item item = itemRepository.findByItemCodeWithVersion(itemCode)
+                .orElseThrow(() -> new IllegalArgumentException("해당 물품은 존재하지 않습니다."));
+        OrderItem orderItem = OrderItem.create(item,Quantity);
+        Order order = Order.createBy(List.of(orderItem));
+        return OrderCreateResponse.of(order);
     }
 }

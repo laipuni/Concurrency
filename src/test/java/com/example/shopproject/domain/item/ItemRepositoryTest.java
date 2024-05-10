@@ -60,7 +60,7 @@ class ItemRepositoryTest extends IntegrationTestSupport {
         assertThat(findItem.getItemCode()).isEqualTo(itemCode);
     }
 
-    @DisplayName("조회 시 Sql에 for Update를 같이 보내서 Lock을 걸기 때문에 다른 사용자들이 해당 데이터에 수정, 조회를 못한다.")
+    @DisplayName("pessimistic 조회 시 Sql에 for Update를 같이 보내서 Lock을 걸기 때문에 다른 사용자들이 해당 데이터에 수정, 조회를 못한다.")
     @Test
     void createOrderWithPessimisticLock(){
         //given
@@ -75,6 +75,26 @@ class ItemRepositoryTest extends IntegrationTestSupport {
 
         //when
         Item findItem = itemRepository.findByItemCodeForUpdate(itemCode).get();
+
+        //then
+        assertThat(findItem.getItemCode()).isEqualTo(itemCode);
+    }
+
+    @DisplayName("Optimistic로 데이터를 조회할 때 version을 확인하고 데이터를 업데이트할 수 있다.")
+    @Test
+    void createOrderWithOptimisticLock(){
+        //given
+        String itemCode = String.valueOf(UUID.randomUUID());
+        Item item = Item.builder()
+                .itemCode(itemCode)
+                .price(1700)
+                .itemName("삼각김밥")
+                .quantity(30)
+                .build();
+        itemRepository.save(item);
+
+        //when
+        Item findItem = itemRepository.findByItemCodeWithVersion(itemCode).get();
 
         //then
         assertThat(findItem.getItemCode()).isEqualTo(itemCode);

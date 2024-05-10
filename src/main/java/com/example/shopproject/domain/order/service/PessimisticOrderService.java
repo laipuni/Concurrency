@@ -25,11 +25,9 @@ public class PessimisticOrderService implements OrderService {
     public OrderCreateResponse orderBy(final String itemCode, final int Quantity) {
         Item item = itemRepository.findByItemCodeForUpdate(itemCode)
                 .orElseThrow(() -> new IllegalArgumentException("해당 물품은 존재하지 않습니다."));
-
         OrderItem orderItem = OrderItem.create(item,Quantity);
-
         Order order = Order.createBy(List.of(orderItem));
-
+        orderRepository.save(order);
         return OrderCreateResponse.of(order);
     }
 }

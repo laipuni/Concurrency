@@ -26,4 +26,8 @@ public interface ItemRepository extends JpaRepository<Item,Long> {
     Optional<Item> findByItemCodeForUpdate(@Param("itemCode") String itemCode);
 
 
+    @Lock(LockModeType.OPTIMISTIC)
+    @Query("select i from Item i where i.itemCode = :itemCode")
+    Optional<Item> findByItemCodeWithVersion(@Param("itemCode") String itemCode);
+
 }

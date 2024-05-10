@@ -59,7 +59,7 @@ class OrderFacadeTest {
     }
 
 
-    @DisplayName("주문 요청이 mode는 Pessimistic, ThreadNum은 50, Quantity는 2개라면 100개 물품 수량이 감소 한다.")
+    @DisplayName("주문 요청이 mode는 Optimistic, ThreadNum은 50, Quantity는 2개라면 100개 물품 수량이 감소 한다.")
     @Test
     void orderByThreadNumOptimistic(){
         //given
@@ -87,5 +87,6 @@ class OrderFacadeTest {
         //then
         assertThat(items.get(0).getQuantity()).isEqualTo(200);
     }
+
 
 }
