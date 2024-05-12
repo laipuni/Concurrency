@@ -7,6 +7,9 @@ spring:
       username: root
       password: 100101
       driver-class-name: com.mysql.cj.jdbc.Driver
+      hikari:
+        maximum-pool-size: 101
+        idle-timeout: 5000
 
     jpa:
       hibernate:
@@ -16,6 +19,7 @@ spring:
         hibernate:
           format_sql: true
           dialect: org.hibernate.dialect.MySQL8Dialect
+
 
 ---
 ####################################################################################################
