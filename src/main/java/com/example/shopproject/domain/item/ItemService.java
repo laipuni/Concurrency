@@ -3,15 +3,20 @@ package com.example.shopproject.domain.item;
 import com.example.shopproject.domain.item.ItemRepository.ItemRepository;
 import com.example.shopproject.domain.item.request.ItemCreateRequest;
 import com.example.shopproject.domain.item.response.ItemCreateResponse;
+import com.example.shopproject.domain.item.response.ItemDetailResponse;
+import com.example.shopproject.domain.item.response.ItemListResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
-@Service
-@Transactional(readOnly = true)
+
+
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
+@Service
 public class ItemService {
 
     private final ItemRepository itemRepository;
@@ -21,6 +26,12 @@ public class ItemService {
         String itemCode = String.valueOf(UUID.randomUUID());
         Item item = itemRepository.save(request.toEntity(itemCode));
         return ItemCreateResponse.of(item);
+    }
+
+    public ItemDetailResponse findByItemCode(String itemCode){
+        Item item = itemRepository.findByItemCode(itemCode)
+                .orElseThrow(() -> new IllegalArgumentException("해당 물품은 존재하지 않습니다."));
+        return ItemDetailResponse.of(item);
     }
 
     @Transactional
@@ -56,5 +67,11 @@ public class ItemService {
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 물품입니다."));
         //상품의 주문 수만큼 제품의 수량 차감
         item.reductQuantity(quantity);
+    }
+
+    public List<ItemListResponse> findAll() {
+        return itemRepository.findAll().stream()
+                .map(ItemListResponse::of)
+                .toList();
     }
 }

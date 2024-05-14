@@ -26,7 +26,6 @@ public class OptimisticOrderService implements OrderService{
     @Override
     public OrderCreateResponse orderBy(final String itemCode, final int Quantity) {
         //충돌 발생시 ObjectOptimisticLockingFailureException 발생
-        log.info("itemCode = {}, Quantity = {}", itemCode, Quantity);
         Item item = itemRepository.findByItemCodeWithVersion(itemCode)
                 .orElseThrow(() -> new IllegalArgumentException("해당 물품은 존재하지 않습니다."));
         OrderItem orderItem = OrderItem.create(item,Quantity);

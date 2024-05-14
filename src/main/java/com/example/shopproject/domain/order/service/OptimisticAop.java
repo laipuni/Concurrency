@@ -33,8 +33,6 @@ public class OptimisticAop {
         Object[] args = joinPoint.getArgs();
         Exception exception = null;
         Random random = new Random();
-        log.info("---------------------- Proxy start line ----------------------",args);
-
         for (int i = 0; i < maxCount; i++) {
             try {
                 return joinPoint.proceed();
@@ -44,8 +42,6 @@ public class OptimisticAop {
                 Thread.sleep(random.nextInt(10,1000));
             }
         }
-
-        log.info("---------------------- Proxy end line ----------------------",args);
         return exception;
     }
 

@@ -56,7 +56,7 @@ class ItemServiceTest extends IntegrationTestSupport {
 
     }
 
-    @DisplayName("주문 받은 수량만큼 현재 수량을 차감한다.")
+    @DisplayName("수량만큼 현재 수량을 차감한다.")
     @Test
     void reductStock(){
         //given
