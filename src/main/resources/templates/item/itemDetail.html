@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/Fragment/BootstrapHeader :: bootstrap(~{::title})}">
+    <title th:text="${item.name}">상품상세</title>
+</head>
+<body>
+<main>
+    <div class="container py-4">
+        <header class="pb-3 mb-4 border-bottom">
+                <a class="btn btn-primary btn-sm" th:href="@{/items}">이전으로</a>
+        </header>
+
+        <div class="row align-items-md-stretch">
+            <div class="col-md-6">
+                <div class="h-100 p-5 text-bg-light rounded-3">
+                    <h1 class="display-5 fw-bold" th:text="${item.name}">제목</h1>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="h-100 p-5 bg-body-tertiary border rounded-3">
+                    <h1 class="display-5 fw-bold" th:text="|${item.price} 원|">가격</h1>
+                    <p class="col-md-8 fs-4" th:text="|현재 수량 : ${item.quantity} 개|">수량</p>
+                    <select th:name="mode" class="form-select">
+                        <option selected>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                    </select>
+                    <div>
+                        <label>수량</label>
+                        <input type="number" th:name="quantity" class="form-control" placeholder="개수를 입력..." min="0">
+                    </div>
+                    <div>
+                        <label th:for="threadNum">쓰레드 개수</label>
+                        <input type="number" th:name="threadNum" class="form-control" placeholder="쓰레드 개수를 입력...." min="0">
+                    </div>
+                    <button class="btn btn-primary btn-lg" type="button">주문</button>
+                </div>
+            </div>
+        </div>
+
+        <footer class="pt-3 mt-4 text-body-secondary border-top">
+            &copy; 라이푸니
+        </footer>
+    </div>
+</main>
+</body>
+</html>

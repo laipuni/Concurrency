@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/Fragment/BootstrapHeader :: bootstrap(~{::title})}">
+    <title>메인화면</title>
+</head>
+<body>
+    <div class="container w-50 py-5">
+        <a class="btn btn-primary" th:href="@{/items}">상품 조회</a>
+        <a class="btn btn-primary" th:href="@{/orders}">주문 조회</a>
+    </div>
+</body>
+</html>
