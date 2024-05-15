@@ -23,7 +23,7 @@ public class InitComponent {
         Item item1 = Item.builder()
                 .itemCode(itemCode1)
                 .itemName("삼각김밥")
-                .price(5000)
+                .price(1500)
                 .quantity(100)
                 .build();
 
@@ -31,7 +31,7 @@ public class InitComponent {
                 .itemCode(itemCode2)
                 .itemName("푸딩")
                 .price(3500)
-                .quantity(100)
+                .quantity(200)
                 .build();
 
         itemRepository.saveAll(List.of(item1,item2));

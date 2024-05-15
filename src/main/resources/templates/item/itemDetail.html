@@ -16,26 +16,26 @@
                     <h1 class="display-5 fw-bold" th:text="${item.name}">제목</h1>
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="h-100 p-5 bg-body-tertiary border rounded-3">
-                    <h1 class="display-5 fw-bold" th:text="|${item.price} 원|">가격</h1>
-                    <p class="col-md-8 fs-4" th:text="|현재 수량 : ${item.quantity} 개|">수량</p>
-                    <select th:name="mode" class="form-select">
-                        <option selected>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                    </select>
-                    <div>
-                        <label>수량</label>
-                        <input type="number" th:name="quantity" class="form-control" placeholder="개수를 입력..." min="0">
+            <form class="col-md-6" th:action="@{/orders/new}" method="post">
+                <input class="visually-hidden" name="itemCode" th:value="${item.itemCode}">
+                    <div class="h-100 p-5 bg-body-tertiary border rounded-3">
+                        <h1 class="display-5 fw-bold" th:text="|${item.price} 원|">가격</h1>
+                        <p class="col-md-8 fs-4" th:text="|현재 수량 : ${item.quantity} 개|">수량</p>
+                        <select th:name="mode" class="form-select">
+                            <option value="optimisticOrderService" selected>Pessimistic</option>
+                            <option value="pessimisticOrderService">Optimistic</option>
+                        </select>
+                        <div>
+                            <label>수량</label>
+                            <input type="number" th:name="itemCount" class="form-control" placeholder="개수를 입력..." min="0" required>
+                        </div>
+                        <div>
+                            <label th:for="threadNum">쓰레드 개수</label>
+                            <input type="number" th:name="threadNum" class="form-control" placeholder="쓰레드 개수를 입력...." min="0" required>
+                        </div>
+                        <button class="btn btn-primary btn-lg" type="submit">주문</button>
                     </div>
-                    <div>
-                        <label th:for="threadNum">쓰레드 개수</label>
-                        <input type="number" th:name="threadNum" class="form-control" placeholder="쓰레드 개수를 입력...." min="0">
-                    </div>
-                    <button class="btn btn-primary btn-lg" type="button">주문</button>
-                </div>
-            </div>
+            </form>
         </div>
 
         <footer class="pt-3 mt-4 text-body-secondary border-top">

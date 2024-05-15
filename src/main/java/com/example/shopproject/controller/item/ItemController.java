@@ -3,6 +3,8 @@ package com.example.shopproject.controller.item;
 import com.example.shopproject.domain.item.response.ItemDetailResponse;
 import com.example.shopproject.domain.item.response.ItemListResponse;
 import com.example.shopproject.domain.item.ItemService;
+import com.example.shopproject.domain.order.request.OrderCreateRequest;
+import com.example.shopproject.domain.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -14,7 +16,7 @@ import java.util.List;
 
 @Slf4j
 @Controller
-@RequiredArgsConstructor()
+@RequiredArgsConstructor
 public class ItemController {
 
     private final ItemService itemService;
