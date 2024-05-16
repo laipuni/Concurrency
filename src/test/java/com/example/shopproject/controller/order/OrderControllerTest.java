@@ -22,6 +22,7 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 class OrderControllerTest extends ControllerIntegrationTest {
@@ -145,14 +146,28 @@ class OrderControllerTest extends ControllerIntegrationTest {
         //when//then
         mockMvc.perform(
                         MockMvcRequestBuilders.post("/orders/new")
-                                .param("threadNum","20")
-                                .param("mode",OptimisticOrderService.class.getName())
+                                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                                .content(content)
                 )
                 .andDo(print())
                 .andExpect(view().name("/index"));
 
     }
 
+    @DisplayName("물품 코드를 받아 물품의 주문 정보들을 가져온 뒤 model로 넘겨 물품 상세 주문정보 페이지로 간다.")
+    @Test
+    void showOrdersAboutItem() throws Exception {
+        //given
+        String itemCode = String.valueOf(UUID.randomUUID());
 
+        //when//then
+        mockMvc.perform(
+                        MockMvcRequestBuilders.get("/orders/" + itemCode)
+                                .param("itemCode",itemCode)
+                )
+                .andDo(print())
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(view().name("/order/ItemOrder"));
 
+    }
 }
