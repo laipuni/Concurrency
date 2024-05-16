@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th = "http://www.thymeleaf.org">
+<head th:replace="~{Fragment/BootstrapHeader :: bootstrap(~{::title})}">
+    <meta charset="UTF-8">
+    <title>한 물품의 주문내역</title>
+</head>
+<body>
+    <div class="container w-50 py-5">
+        <div>
+            <a class="btn btn-primary btn-sm" th:href="@{/items}">이전으로</a>
+        </div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>주문 번호</th>
+                <th>쓰레드 번호</th>
+                <th>주문 수량</th>
+                <th>주문 방식</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="order : ${orders}">
+                <td th:text="${order.orderId}">1</td>
+                <td th:text="${order.threadNum}">1</td>
+                <td th:text="${order.quantity}">5</td>
+                <td th:text="${order.orderType}">Pessimistic</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
