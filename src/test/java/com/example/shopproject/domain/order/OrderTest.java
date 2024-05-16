@@ -32,7 +32,7 @@ class OrderTest extends IntegrationTestSupport{
         );
 
         //when
-        Order order = Order.createBy(orderItems);
+        Order order = Order.createBy(orderItems,1,OrderType.PESSIMISTIC);
 
         //then
         assertThat(order)

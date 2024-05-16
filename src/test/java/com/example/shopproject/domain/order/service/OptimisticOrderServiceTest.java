@@ -46,7 +46,7 @@ class OptimisticOrderServiceTest {
         itemRepository.save(item);
 
         //when
-        OrderCreateResponse orderCreateResponse = optimisticOrderService.orderBy(itemCode, orderItemQuantity);
+        OrderCreateResponse orderCreateResponse = optimisticOrderService.orderBy(itemCode, orderItemQuantity,1);
         List<Item> items = itemRepository.findAll();
 
         //then
@@ -75,9 +75,10 @@ class OptimisticOrderServiceTest {
         itemRepository.save(item);
         //when
         for (int i = 0; i < thread; i++) {
+            final int threadNum = i;
             executorService.execute(() ->{
                 try {
-                    optimisticOrderService.orderBy(itemCode,1);
+                    optimisticOrderService.orderBy(itemCode,1,threadNum);
                 } finally {
                     latch.countDown();
                 }

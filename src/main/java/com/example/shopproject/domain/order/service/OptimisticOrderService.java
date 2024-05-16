@@ -4,6 +4,7 @@ import com.example.shopproject.domain.item.Item;
 import com.example.shopproject.domain.item.ItemRepository.ItemRepository;
 import com.example.shopproject.domain.order.Order;
 import com.example.shopproject.domain.order.OrderRepository;
+import com.example.shopproject.domain.order.OrderType;
 import com.example.shopproject.domain.order.response.OrderCreateResponse;
 import com.example.shopproject.domain.orderitem.OrderItem;
 import lombok.RequiredArgsConstructor;
@@ -24,12 +25,12 @@ public class OptimisticOrderService implements OrderService{
     @OptimisticRetry
     @Transactional
     @Override
-    public OrderCreateResponse orderBy(final String itemCode, final int Quantity) {
+    public OrderCreateResponse orderBy(final String itemCode, final int Quantity, final int threadNum) {
         //충돌 발생시 ObjectOptimisticLockingFailureException 발생
         Item item = itemRepository.findByItemCodeWithVersion(itemCode)
                 .orElseThrow(() -> new IllegalArgumentException("해당 물품은 존재하지 않습니다."));
         OrderItem orderItem = OrderItem.create(item,Quantity);
-        Order order = Order.createBy(List.of(orderItem));
+        Order order = Order.createBy(List.of(orderItem),threadNum, OrderType.OPTIMISTIC);
         orderRepository.save(order);
         return OrderCreateResponse.of(order);
     }

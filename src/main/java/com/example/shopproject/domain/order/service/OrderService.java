@@ -5,6 +5,6 @@ import org.springframework.stereotype.Service;
 
 public interface OrderService {
 
-    public OrderCreateResponse orderBy(final String itemCode, int Quantity);
+    public OrderCreateResponse orderBy(final String itemCode,final int Quantity,final int threadNum);
 
 }

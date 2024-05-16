@@ -23,7 +23,10 @@ public class OrderItem {
     @Column(nullable = false)
     private int itemPrice;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @Column(nullable = false)
+    private String itemCode;
+
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "order_id")
     private Order order;
 
@@ -32,14 +35,15 @@ public class OrderItem {
     private Item item;
 
     @Builder
-    private OrderItem(final int count, final int itemPrice,final Order order,final Item item) {
+    private OrderItem(final int count, final int itemPrice,final String itemCode,final Order order,final Item item) {
         this.count = count;
         this.itemPrice = itemPrice;
+        this.itemCode = itemCode;
         this.order = order;
         this.item = item;
     }
 
-    public void setOrder(final Order order) {
+    public void changeOrder(final Order order) {
         this.order = order;
     }
 
@@ -49,6 +53,7 @@ public class OrderItem {
         return OrderItem.builder()
                 .item(item)
                 .count(count)
+                .itemCode(item.getItemCode())
                 .itemPrice(item.getPrice())
                 .build();
     }

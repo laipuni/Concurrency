@@ -48,7 +48,7 @@ class PessimisticOrderServiceTest {
         itemRepository.save(item);
 
         //when
-        OrderCreateResponse orderCreateResponse = orderService.orderBy(itemCode, orderItemQuantity);
+        OrderCreateResponse orderCreateResponse = orderService.orderBy(itemCode, orderItemQuantity,1);
         List<Item> items = itemRepository.findAll();
 
         //then

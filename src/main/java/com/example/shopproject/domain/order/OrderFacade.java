@@ -25,9 +25,10 @@ public class OrderFacade {
         ExecutorService executorService = Executors.newFixedThreadPool(request.getThreadNum());
         log.info("orderService = {}",orderService);
         for (int i = 0; i < request.getThreadNum(); i++) {
+            final int threadNum = i;
             executorService.execute(()->{
                 try{
-                    orderService.orderBy(request.getItemCode(), request.getItemCount());
+                    orderService.orderBy(request.getItemCode(), request.getItemCount(),threadNum);
                 } catch (Exception e){
                     e.printStackTrace();
                 } finally {
